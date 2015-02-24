@@ -1,7 +1,7 @@
 #!/usr/bin/make -f
 
 PYTHONS:=$(shell pyversions -vr)
-PYTHON3S:=$(shell py3versions -vr)
+#PYTHON3S:=$(shell py3versions -vr)
 
 UPSTREAM_GIT = git://github.com/openstack/python-zaqarclient.git
 -include /usr/share/openstack-pkg-tools/pkgos.make
@@ -16,10 +16,10 @@ override_dh_install:
 		python$$pyvers setup.py install --install-layout=deb \
 			--root $(CURDIR)/debian/python-python-zaqarclient; \
 	done
-	set -e ; for pyvers in $(PYTHON3S); do \
-		python$$pyvers setup.py install --install-layout=deb \
-			--root $(CURDIR)/debian/python3-python-zaqarclient; \
-	done
+#	set -e ; for pyvers in $(PYTHON3S); do \
+#		python$$pyvers setup.py install --install-layout=deb \
+#			--root $(CURDIR)/debian/python3-python-zaqarclient; \
+#	done
 	rm -rf $(CURDIR)/debian/python*-python-zaqarclient/usr/lib/python*/dist-packages/*.pth
 
 override_dh_auto_test:
