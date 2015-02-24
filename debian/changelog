@@ -1,0 +1,5 @@
+python-zaqarclient (0.1.0-1) unstable; urgency=medium
+
+  * Initial release. (Closes: #779140)
+
+ -- Thomas Goirand <zigo@debian.org>  Tue, 24 Feb 2015 18:01:23 +0100
