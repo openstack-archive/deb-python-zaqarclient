@@ -1,0 +1,60 @@
+Source: python-zaqarclient
+Section: python
+Priority: optional
+Maintainer: PKG OpenStack <openstack-devel@lists.alioth.debian.org>
+Uploaders: Thomas Goirand <zigo@debian.org>
+Build-Depends: debhelper (>= 9),
+               dh-python,
+               openstack-pkg-tools,
+               python-all (>= 2.6.6-3~),
+               python-pbr,
+               python-setuptools,
+Build-Depends-Indep: python-coverage,
+                     python-ddt,
+                     python-fixtures,
+                     python-hacking,
+                     python-jsonschema,
+                     python-keystoneclient,
+                     python-mock,
+                     python-nose,
+                     python-nose-exclude,
+                     python-openstack.nose-plugin,
+                     python-requests,
+                     python-six,
+                     python-stevedore (>= 1.0.0),
+                     python-testtools,
+                     subunit,
+                     testrepository,
+Standards-Version: 3.9.6
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=openstack/python-zaqarclient.git
+Vcs-Git: git://anonscm.debian.org/openstack/python-zaqarclient.git
+Homepage: http://www.openstack.org/
+
+Package: python-zaqarclient
+Architecture: all
+Depends: python-jsonschema,
+         python-keystoneclient,
+         python-requests,
+         python-six,
+         python-stevedore (>= 1.0.0),
+         ${misc:Depends},
+         ${python:Depends},
+Description: OpenStack Zaqar Queueing API, client and library - Python 2.x
+ Zaqar is a multi-tenant cloud messaging service for web developers. It
+ combines the ideas pioneered by Amazon's SQS product with additional
+ semantics to support event broadcasting.
+ .
+ The service features a fully RESTful API, which developers can use to send
+ messages between various components of their SaaS and mobile applications, by
+ using a variety of communication patterns. Underlying this API is an efficient
+ messaging engine designed with scalability and security in mind.
+ .
+ Other OpenStack components can integrate with Zaqar to surface events to end
+ users and to communicate with guest agents that run in the "over-cloud" layer.
+ Cloud operators can leverage Zaqar to provide equivalents of SQS and SNS to their customers.
+ .
+ By installing python-zaqarclient you get programmatic access to the Zaqar v1.0
+ API library. Plus, it installs a plugin to python-openstackclient that allows
+ you to perform simple queue operations.
+ .
+ This package contains the Python 2.x module.
