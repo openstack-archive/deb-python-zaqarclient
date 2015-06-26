@@ -34,7 +34,6 @@ class KeystoneAuth(base.AuthBackend):
             - os_auth_token
             - os_region_name
             - os_service_type
-            - os_service_type
             - os_endpoint_type
     :type conf: `dict`
     """
@@ -87,7 +86,7 @@ class KeystoneAuth(base.AuthBackend):
             if not request.endpoint:
                 extra = {
                     'service_type': self.conf.get('os_service_type',
-                                                  'queuing'),
+                                                  'messaging'),
                     'endpoint_type': self.conf.get('os_endpoint_type',
                                                    'publicURL'),
                 }

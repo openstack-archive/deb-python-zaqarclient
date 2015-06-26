@@ -98,8 +98,25 @@ class TestV1Core(base.TestBase):
             result = core.queue_get_stats(self.transport, req, 'test')
             self.assertEqual(result, {})
 
-    def test_message_post(self):
-        messages = [{'ttl': 30, 'body': 'Post It!'}]
+    def test_message_post_one(self):
+        messages = {'ttl': 30, 'body': 'Post one!'}
+
+        with mock.patch.object(self.transport, 'send',
+                               autospec=True) as send_method:
+            resp = response.Response(None, '{}')
+            send_method.return_value = resp
+
+            req = request.Request()
+
+            core.message_post(self.transport, req, 'test', messages)
+            self.assertIn('queue_name', req.params)
+            self.assertEqual(json.loads(req.content),
+                             messages)
+
+    def test_message_post_many(self):
+        messages = [{'ttl': 30, 'body': 'Post one!'},
+                    {'ttl': 30, 'body': 'Post two!'},
+                    {'ttl': 30, 'body': 'Post three!'}, ]
 
         with mock.patch.object(self.transport, 'send',
                                autospec=True) as send_method:
@@ -203,6 +220,16 @@ class TestV1Core(base.TestBase):
             core.pool_create(self.transport, req,
                              'test_pool', {'uri': 'sqlite://',
                                            'weight': 0})
+
+    def test_pool_get(self):
+        with mock.patch.object(self.transport, 'send',
+                               autospec=True) as send_method:
+            resp = response.Response(None, None)
+            send_method.return_value = resp
+
+            req = request.Request()
+            core.pool_get(self.transport, req,
+                          'test_pool')
 
     def test_pool_delete(self):
         with mock.patch.object(self.transport, 'send',

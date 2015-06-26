@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from zaqarclient import errors
 from zaqarclient.queues.v1 import claim as claim_api
 from zaqarclient.queues.v1 import core
 from zaqarclient.queues.v1 import iterator
@@ -31,10 +32,17 @@ class Queue(object):
         if auto_create:
             self.ensure_exists()
 
+    @property
+    def name(self):
+        return self._name
+
     def exists(self):
         """Checks if the queue exists."""
         req, trans = self.client._request_and_transport()
-        return core.queue_exists(trans, req, self._name)
+        if self.client.api_version >= 1.1:
+            raise errors.InvalidOperation("Unavailable on versions >= 1.1")
+        else:
+            return core.queue_exists(trans, req, self._name)
 
     def ensure_exists(self):
         """Ensures a queue exists
@@ -78,7 +86,10 @@ class Queue(object):
         if self._metadata and not force_reload:
             return self._metadata
 
-        self._metadata = core.queue_get_metadata(trans, req, self._name)
+        if self.client.api_version >= 1.1:
+            self._metadata = core.queue_get(trans, req, self._name)
+        else:
+            self._metadata = core.queue_get_metadata(trans, req, self._name)
         return self._metadata
 
     @property
@@ -103,6 +114,9 @@ class Queue(object):
         """
         if not isinstance(messages, list):
             messages = [messages]
+
+        if self.client.api_version >= 1.1:
+            messages = {'messages': messages}
 
         req, trans = self.client._request_and_transport()
 

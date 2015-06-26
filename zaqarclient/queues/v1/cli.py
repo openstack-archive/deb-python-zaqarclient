@@ -38,14 +38,13 @@ class CreateQueue(show.ShowOne):
     def take_action(self, parsed_args):
         self.log.debug("take_action(%s)" % parsed_args)
 
-        client = self.app.client_manager.queuing
+        client = self.app.client_manager.messaging
 
         queue_name = parsed_args.queue_name
         data = client.queue(queue_name)
 
         columns = ('Name',)
-        properties = ("_Name",)
-        return columns, utils.get_item_properties(data, properties)
+        return columns, utils.get_item_properties(data, columns)
 
 
 class DeleteQueue(command.Command):
@@ -63,7 +62,7 @@ class DeleteQueue(command.Command):
 
     def take_action(self, parsed_args):
         self.log.debug("take_action(%s)" % parsed_args)
-        client = self.app.client_manager.queuing
+        client = self.app.client_manager.messaging
 
         queue_name = parsed_args.queue_name
 
@@ -91,7 +90,7 @@ class ListQueues(lister.Lister):
     def take_action(self, parsed_args):
         self.log.debug("take_action(%s)" % parsed_args)
 
-        client = self.app.client_manager.queuing
+        client = self.app.client_manager.messaging
 
         kwargs = {}
         if parsed_args.marker is not None:
@@ -101,9 +100,8 @@ class ListQueues(lister.Lister):
 
         data = client.queues(**kwargs)
         columns = ("Name", )
-        properties = ("_Name",)
         return (columns,
-                (utils.get_item_properties(s, properties) for s in data))
+                (utils.get_item_properties(s, columns) for s in data))
 
 
 class CheckQueueExistence(show.ShowOne):
@@ -122,7 +120,7 @@ class CheckQueueExistence(show.ShowOne):
     def take_action(self, parsed_args):
         self.log.debug("take_action(%s)" % parsed_args)
 
-        client = self.app.client_manager.queuing
+        client = self.app.client_manager.messaging
 
         queue_name = parsed_args.queue_name
         queue = client.queue(queue_name, auto_create=False)
@@ -152,7 +150,7 @@ class SetQueueMetadata(command.Command):
     def take_action(self, parsed_args):
         self.log.debug("take_action(%s)" % parsed_args)
 
-        client = self.app.client_manager.queuing
+        client = self.app.client_manager.messaging
 
         queue_name = parsed_args.queue_name
         queue_metadata = parsed_args.queue_metadata
@@ -187,7 +185,7 @@ class GetQueueMetadata(show.ShowOne):
     def take_action(self, parsed_args):
         self.log.debug("take_action(%s)" % parsed_args)
 
-        client = self.app.client_manager.queuing
+        client = self.app.client_manager.messaging
 
         queue_name = parsed_args.queue_name
         queue = client.queue(queue_name, auto_create=False)
@@ -216,7 +214,7 @@ class GetQueueStats(show.ShowOne):
     def take_action(self, parsed_args):
         self.log.debug("take_action(%s)" % parsed_args)
 
-        client = self.app.client_manager.queuing
+        client = self.app.client_manager.messaging
 
         queue_name = parsed_args.queue_name
         queue = client.queue(queue_name, auto_create=False)

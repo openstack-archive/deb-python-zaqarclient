@@ -163,6 +163,15 @@ class V1(api.Api):
             }
         },
 
+        'pool_get': {
+            'ref': 'pools/{pool_name}',
+            'method': 'GET',
+            'required': ['pool_name'],
+            'properties': {
+                'pool_name': {'type': 'string'},
+            }
+        },
+
         'pool_delete': {
             'ref': 'pools/{pool_name}',
             'method': 'DELETE',
@@ -180,6 +189,16 @@ class V1(api.Api):
                 'flavor_name': {'type': 'string'},
             }
         },
+
+        'flavor_get': {
+            'ref': 'flavors/{flavor_name}',
+            'method': 'GET',
+            'required': ['flavor_name'],
+            'properties': {
+                'flavor_name': {'type': 'string'},
+            }
+        },
+
 
         'flavor_delete': {
             'ref': 'flavors/{flavor_name}',
@@ -246,6 +265,15 @@ class V1_1(V1):
 
 
 V1_1.schema.update({
+    'queue_get': {
+        'ref': 'queues/{queue_name}',
+        'method': 'GET',
+        'required': ['queue_name'],
+        'properties': {
+            'queue_name': {'type': 'string'}
+        }
+    },
+
     'message_pop': {
         'ref': 'queues/{queue_name}/messages',
         'method': 'DELETE',

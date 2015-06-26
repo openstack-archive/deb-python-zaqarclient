@@ -92,6 +92,12 @@ def queue_exists(transport, request, name, callback=None):
         return False
 
 
+def queue_get(transport, request, name, callback=None):
+    """Retrieve a queue."""
+    return _common_queue_ops('queue_get', transport,
+                             request, name, callback=callback)
+
+
 def queue_get_metadata(transport, request, name, callback=None):
     """Gets queue metadata."""
     return _common_queue_ops('queue_get_metadata', transport,
@@ -336,7 +342,9 @@ def message_pop(transport, request, queue_name,
     request.operation = 'message_delete_many'
     request.params['queue_name'] = queue_name
     request.params['pop'] = count
-    transport.send(request)
+
+    resp = transport.send(request)
+    return resp.deserialized_content
 
 
 def claim_create(transport, request, queue_name, **kwargs):
@@ -418,6 +426,25 @@ def shard_delete(transport, request, pool_name):
     return pool_delete(transport, request, pool_name)
 
 
+def pool_get(transport, request, pool_name, callback=None):
+    """Gets pool data
+
+    :param transport: Transport instance to use
+    :type transport: `transport.base.Transport`
+    :param request: Request instance ready to be sent.
+    :type request: `transport.request.Request`
+    :param pool_name: Pool reference name.
+    :type pool_name: `six.text_type`
+
+    """
+
+    request.operation = 'pool_get'
+    request.params['pool_name'] = pool_name
+
+    resp = transport.send(request)
+    return resp.deserialized_content
+
+
 def pool_create(transport, request, pool_name, pool_data):
     """Creates a pool called `pool_name`
 
@@ -470,6 +497,25 @@ def flavor_create(transport, request, name, flavor_data):
     request.params['flavor_name'] = name
     request.content = json.dumps(flavor_data)
     transport.send(request)
+
+
+def flavor_get(transport, request, flavor_name, callback=None):
+    """Gets flavor data
+
+    :param transport: Transport instance to use
+    :type transport: `transport.base.Transport`
+    :param request: Request instance ready to be sent.
+    :type request: `transport.request.Request`
+    :param flavor_name: Flavor reference name.
+    :type flavor_name: `six.text_type`
+
+    """
+
+    request.operation = 'flavor_get'
+    request.params['flavor_name'] = flavor_name
+
+    resp = transport.send(request)
+    return resp.deserialized_content
 
 
 def flavor_delete(transport, request, name):
