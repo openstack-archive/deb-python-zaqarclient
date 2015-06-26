@@ -3,6 +3,7 @@ python-zaqarclient (0.1.1-1) UNRELEASED; urgency=medium
   * New upstream release:
     - d/rules: Update UPSTREAM_GIT repo path.
     - d/control: Align (Build-)Depends with upstream.
+    - d/gbp.conf: Set debian-branch to debian/liberty.
 
  -- Corey Bryant <corey.bryant@canonical.com>  Fri, 26 Jun 2015 11:03:52 -0400
 
