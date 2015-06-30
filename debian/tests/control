@@ -1,0 +1,3 @@
+Tests: unittests
+Depends: @, @builddeps@
+Restrictions: allow-stderr needs-root

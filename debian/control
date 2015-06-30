@@ -30,6 +30,7 @@ Standards-Version: 3.9.6
 Vcs-Browser: http://anonscm.debian.org/gitweb/?p=openstack/python-zaqarclient.git
 Vcs-Git: git://anonscm.debian.org/openstack/python-zaqarclient.git
 Homepage: http://www.openstack.org/
+XS-Testsuite: autopkgtest
 
 Package: python-zaqarclient
 Architecture: all

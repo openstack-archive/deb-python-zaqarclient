@@ -8,6 +8,8 @@ python-zaqarclient (0.1.1-1) UNRELEASED; urgency=medium
 
   [ James Page ]
   * Update watch file to use Debian pypi redirector.
+  * Add DEP-8 execution of unit tests as they require all entry points
+    to be setup.
 
  -- Corey Bryant <corey.bryant@canonical.com>  Fri, 26 Jun 2015 11:03:52 -0400
 
