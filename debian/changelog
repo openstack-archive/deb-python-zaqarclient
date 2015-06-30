@@ -1,4 +1,4 @@
-python-zaqarclient (0.1.1-1) UNRELEASED; urgency=medium
+python-zaqarclient (0.1.1-1) experimental; urgency=medium
 
   [ Corey Bryant ]
   * New upstream release:
@@ -9,9 +9,9 @@ python-zaqarclient (0.1.1-1) UNRELEASED; urgency=medium
   [ James Page ]
   * Update watch file to use Debian pypi redirector.
   * Add DEP-8 execution of unit tests as they require all entry points
-    to be setup.
+    to be setup, disable unit test execution as part of package build.
 
- -- Corey Bryant <corey.bryant@canonical.com>  Fri, 26 Jun 2015 11:03:52 -0400
+ -- James Page <james.page@ubuntu.com>  Tue, 30 Jun 2015 09:24:10 +0100
 
 python-zaqarclient (0.1.0-1) unstable; urgency=medium
 
