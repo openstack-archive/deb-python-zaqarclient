@@ -28,8 +28,6 @@ Functions present in this module assume that:
 """
 
 import json
-import warnings
-
 import zaqarclient.transport.errors as errors
 
 
@@ -358,6 +356,10 @@ def claim_create(transport, request, queue_name, **kwargs):
 
     request.operation = 'claim_create'
     request.params['queue_name'] = queue_name
+
+    if 'limit' in kwargs:
+        request.params['limit'] = kwargs.pop('limit')
+
     request.content = json.dumps(kwargs)
 
     resp = transport.send(request)
@@ -414,18 +416,6 @@ def claim_delete(transport, request, queue_name, claim_id):
     transport.send(request)
 
 
-def shard_create(transport, request, pool_name, pool_data):
-    warnings.warn(_('`shard_create`\'s been renamed to `pool_create` '),
-                  DeprecationWarning, stacklevel=2)
-    return pool_create(transport, request, pool_name, pool_data)
-
-
-def shard_delete(transport, request, pool_name):
-    warnings.warn(_('`shard_delete`\'s been renamed to `pool_delete` '),
-                  DeprecationWarning, stacklevel=2)
-    return pool_delete(transport, request, pool_name)
-
-
 def pool_get(transport, request, pool_name, callback=None):
     """Gets pool data
 
@@ -448,6 +438,7 @@ def pool_get(transport, request, pool_name, callback=None):
 def pool_create(transport, request, pool_name, pool_data):
     """Creates a pool called `pool_name`
 
+
     :param transport: Transport instance to use
     :type transport: `transport.base.Transport`
     :param request: Request instance ready to be sent.
@@ -462,6 +453,50 @@ def pool_create(transport, request, pool_name, pool_data):
     request.params['pool_name'] = pool_name
     request.content = json.dumps(pool_data)
     transport.send(request)
+
+
+def pool_update(transport, request, pool_name, pool_data):
+    """Updates the pool `pool_name`
+
+    :param transport: Transport instance to use
+    :type transport: `transport.base.Transport`
+    :param request: Request instance ready to be sent.
+    :type request: `transport.request.Request`
+    :param pool_name: Pool reference name.
+    :type pool_name: `six.text_type`
+    :param pool_data: Pool's properties, i.e: weight, uri, options.
+    :type pool_data: `dict`
+    """
+
+    request.operation = 'pool_update'
+    request.params['pool_name'] = pool_name
+    request.content = json.dumps(pool_data)
+
+    resp = transport.send(request)
+    return resp.deserialized_content
+
+
+def pool_list(transport, request, **kwargs):
+    """Gets a list of pools
+
+    :param transport: Transport instance to use
+    :type transport: `transport.base.Transport`
+    :param request: Request instance ready to be sent.
+    :type request: `transport.request.Request`
+    :param kwargs: Optional arguments for this operation.
+        - marker: Where to start getting pools from.
+        - limit: Maximum number of pools to get.
+    """
+
+    request.operation = 'pool_list'
+    request.params.update(kwargs)
+
+    resp = transport.send(request)
+
+    if not resp.content:
+        return {'links': [], 'pools': []}
+
+    return resp.deserialized_content
 
 
 def pool_delete(transport, request, pool_name):
@@ -515,6 +550,50 @@ def flavor_get(transport, request, flavor_name, callback=None):
     request.params['flavor_name'] = flavor_name
 
     resp = transport.send(request)
+    return resp.deserialized_content
+
+
+def flavor_update(transport, request, flavor_name, flavor_data):
+    """Updates the flavor `flavor_name`
+
+    :param transport: Transport instance to use
+    :type transport: `transport.base.Transport`
+    :param request: Request instance ready to be sent.
+    :type request: `transport.request.Request`
+    :param flavor_name: Flavor reference name.
+    :type flavor_name: `six.text_type`
+    :param flavor_data: Flavor's properties, i.e: pool, capabilities.
+    :type flavor_data: `dict`
+    """
+
+    request.operation = 'flavor_update'
+    request.params['flavor_name'] = flavor_name
+    request.content = json.dumps(flavor_data)
+
+    resp = transport.send(request)
+    return resp.deserialized_content
+
+
+def flavor_list(transport, request, **kwargs):
+    """Gets a list of flavors
+
+    :param transport: Transport instance to use
+    :type transport: `transport.base.Transport`
+    :param request: Request instance ready to be sent.
+    :type request: `transport.request.Request`
+    :param kwargs: Optional arguments for this operation.
+        - marker: Where to start getting flavors from.
+        - limit: Maximum number of flavors to get.
+    """
+
+    request.operation = 'flavor_list'
+    request.params.update(kwargs)
+
+    resp = transport.send(request)
+
+    if not resp.content:
+        return {'links': [], 'flavors': []}
+
     return resp.deserialized_content
 
 

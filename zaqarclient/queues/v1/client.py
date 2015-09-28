@@ -14,7 +14,6 @@
 # limitations under the License.
 
 import uuid
-import warnings
 
 from zaqarclient.common import decorators
 from zaqarclient.queues.v1 import core
@@ -130,11 +129,6 @@ class Client(object):
         return trans.send(req).deserialized_content
 
     # ADMIN API
-    def shard(self, ref, **kwargs):
-        warnings.warn(_('`shard_create`\'s been renamed to `pool_create` '),
-                      DeprecationWarning, stacklevel=2)
-        return self.pool(ref, **kwargs)
-
     def pool(self, ref, **kwargs):
         """Returns a pool instance
 
@@ -145,6 +139,24 @@ class Client(object):
         :rtype: `pool.Pool`
         """
         return pool.Pool(self, ref, **kwargs)
+
+    def pools(self, **params):
+        """Gets a list of pools from the server
+
+        :param params: Filters to use for getting pools
+        :type params: **kwargs dict.
+
+        :returns: A list of pools
+        :rtype: `list`
+        """
+        req, trans = self._request_and_transport()
+
+        pool_list = core.pool_list(trans, req, **params)
+
+        return iterator._Iterator(self,
+                                  pool_list,
+                                  'pools',
+                                  pool.create_object(self))
 
     @decorators.version(min_version=1.1)
     def flavor(self, ref, **kwargs):
@@ -157,6 +169,25 @@ class Client(object):
         :rtype: `flavor.Flavor`
         """
         return flavor.Flavor(self, ref, **kwargs)
+
+    @decorators.version(min_version=1.1)
+    def flavors(self, **params):
+        """Gets a list of flavors from the server
+
+        :param params: Filters to use for getting flavors
+        :type params: **kwargs dict.
+
+        :returns: A list of flavors
+        :rtype: `list`
+        """
+        req, trans = self._request_and_transport()
+
+        flavor_list = core.flavor_list(trans, req, **params)
+
+        return iterator._Iterator(self,
+                                  flavor_list,
+                                  'flavors',
+                                  flavor.create_object(self))
 
     def health(self):
         """Gets the health status of Zaqar server."""

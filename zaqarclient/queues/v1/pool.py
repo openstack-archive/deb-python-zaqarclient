@@ -58,8 +58,20 @@ class Pool(object):
             if self.client.api_version >= 1.1:
                 data['group'] = self.group
 
+            req, trans = self.client._request_and_transport()
             core.pool_create(trans, req, self.name, data)
+
+    def update(self, pool_data):
+        req, trans = self.client._request_and_transport()
+        core.pool_update(trans, req, self.name, pool_data)
+
+        for key, value in pool_data.items():
+            setattr(self, key, value)
 
     def delete(self):
         req, trans = self.client._request_and_transport()
         core.pool_delete(trans, req, self.name)
+
+
+def create_object(parent):
+    return lambda args: Pool(parent, args["name"], auto_create=False)
