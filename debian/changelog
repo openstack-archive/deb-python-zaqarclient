@@ -29,6 +29,6 @@ python-zaqarclient (0.1.1-1) experimental; urgency=medium
 
 python-zaqarclient (0.1.0-1) unstable; urgency=medium
 
-  * Initial release. (Closes: #XXXXXX)
+  * Initial release.
 
  -- Thomas Goirand <zigo@debian.org>  Thu, 16 Apr 2015 21:36:04 +0200
