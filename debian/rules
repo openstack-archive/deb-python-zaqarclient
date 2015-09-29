@@ -14,11 +14,11 @@ export OSLO_PACKAGE_VERSION=$(VERSION)
 override_dh_install:
 	set -e ; for pyvers in $(PYTHONS); do \
 		python$$pyvers setup.py install --install-layout=deb \
-			--root $(CURDIR)/debian/python-python-zaqarclient; \
+			--root $(CURDIR)/debian/python-zaqarclient; \
 	done
 #	set -e ; for pyvers in $(PYTHON3S); do \
 #		python$$pyvers setup.py install --install-layout=deb \
-#			--root $(CURDIR)/debian/python3-python-zaqarclient; \
+#			--root $(CURDIR)/debian/python3-zaqarclient; \
 #	done
 	rm -rf $(CURDIR)/debian/python*-python-zaqarclient/usr/lib/python*/dist-packages/*.pth
 
