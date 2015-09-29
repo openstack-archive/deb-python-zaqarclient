@@ -44,8 +44,8 @@ Depends: python-jsonschema,
          ${python:Depends},
 Description: OpenStack Zaqar Queueing API, client and library - Python 2.x
  Zaqar is a multi-tenant cloud messaging service for web developers. It
- combines the ideas pioneered by Amazon's SQS product with additional
- semantics to support event broadcasting.
+ combines the ideas pioneered by Amazon's SQS product with additional semantics
+ to support event broadcasting.
  .
  The service features a fully RESTful API, which developers can use to send
  messages between various components of their SaaS and mobile applications, by
@@ -54,7 +54,8 @@ Description: OpenStack Zaqar Queueing API, client and library - Python 2.x
  .
  Other OpenStack components can integrate with Zaqar to surface events to end
  users and to communicate with guest agents that run in the "over-cloud" layer.
- Cloud operators can leverage Zaqar to provide equivalents of SQS and SNS to their customers.
+ Cloud operators can leverage Zaqar to provide equivalents of SQS and SNS to
+ their customers.
  .
  By installing python-zaqarclient you get programmatic access to the Zaqar v1.0
  API library. Plus, it installs a plugin to python-openstackclient that allows

@@ -8,6 +8,7 @@ python-zaqarclient (0.2.0-1) experimental; urgency=medium
   * Adds avoid-already-taken-flavor-delete-openstackclient-command.patch.
   * Removed version on python-all build-depends.
   * Move python-sphinx from build-depends-indep to build-depends.
+  * Rewrap long description.
 
  -- Thomas Goirand <zigo@debian.org>  Fri, 02 Oct 2015 14:08:42 +0200
 
