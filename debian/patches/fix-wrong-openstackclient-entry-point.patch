@@ -1,0 +1,22 @@
+Description: Fix wrong openstackclient entry points
+ The choosen namespace is conflicting with other projects, so we must
+ patch this out. Otherwise, doing "openstack help", we get stuff like this:
+  Could not load EntryPoint.parse('pool_create = zaqarclient.queues.v1.cli:CreatePool')
+  'ArgumentParser' object has no attribute 'debug'
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: no
+Last-Update: 2015-10-2
+
+--- python-zaqarclient-0.2.0.orig/setup.cfg
++++ python-zaqarclient-0.2.0/setup.cfg
+@@ -52,8 +52,8 @@ openstack.messaging.v1 =
+     queue_set_metadata = zaqarclient.queues.v1.cli:SetQueueMetadata
+     queue_get_metadata = zaqarclient.queues.v1.cli:GetQueueMetadata
+     queue_stats = zaqarclient.queues.v1.cli:GetQueueStats
+-    pool_create = zaqarclient.queues.v1.cli:CreatePool
+-    flavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
++    messaging_pool_create = zaqarclient.queues.v1.cli:CreatePool
++    messaging_flavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
+ 
+ openstack.cli.extension =
+     messaging = zaqarclient.queues.cli
