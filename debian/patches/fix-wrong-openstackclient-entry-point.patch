@@ -15,8 +15,8 @@ Last-Update: 2015-10-2
      queue_stats = zaqarclient.queues.v1.cli:GetQueueStats
 -    pool_create = zaqarclient.queues.v1.cli:CreatePool
 -    flavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
-+    messaging_pool_create = zaqarclient.queues.v1.cli:CreatePool
-+    messaging_flavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
++    zaqarpool_create = zaqarclient.queues.v1.cli:CreatePool
++    zaqarflavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
  
  openstack.cli.extension =
      messaging = zaqarclient.queues.cli
