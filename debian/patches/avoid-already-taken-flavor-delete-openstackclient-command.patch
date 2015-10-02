@@ -1,0 +1,16 @@
+Description: Avoid already taken flavor delete openstackclient command
+Author: Thomas Goirand <zigo@debian.org>
+Forwarded: no
+Last-Update: 2015-10-02
+
+--- python-zaqarclient-0.2.0.orig/setup.cfg
++++ python-zaqarclient-0.2.0/setup.cfg
+@@ -53,7 +53,7 @@ openstack.messaging.v1 =
+     queue_get_metadata = zaqarclient.queues.v1.cli:GetQueueMetadata
+     queue_stats = zaqarclient.queues.v1.cli:GetQueueStats
+     pool_create = zaqarclient.queues.v1.cli:CreatePool
+-    flavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
++    zaqarflavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
+ 
+ openstack.cli.extension =
+     messaging = zaqarclient.queues.cli

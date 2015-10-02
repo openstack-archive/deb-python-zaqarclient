@@ -1,9 +1,13 @@
-python-zaqarclient (0.2.0-1) UNRELEASED; urgency=medium
+python-zaqarclient (0.2.0-1) experimental; urgency=medium
 
+  [ Corey Bryant ]
   * New upstream release.
   * d/control: Align dependencies with upstream.
 
- -- Corey Bryant <corey.bryant@canonical.com>  Mon, 28 Sep 2015 10:54:04 -0400
+  [ Thomas Goirand ]
+  * Adds avoid-already-taken-flavor-delete-openstackclient-command.patch.
+
+ -- Thomas Goirand <zigo@debian.org>  Fri, 02 Oct 2015 14:08:42 +0200
 
 python-zaqarclient (0.1.1-1) experimental; urgency=medium
 
