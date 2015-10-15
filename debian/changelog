@@ -1,6 +1,7 @@
-python-zaqarclient (0.2.0-2) experimental; urgency=medium
+python-zaqarclient (0.2.0-2) unstable; urgency=medium
 
   * Fixed empty package with no python module.
+  * Uploading to unstable.
 
  -- Thomas Goirand <zigo@debian.org>  Tue, 29 Sep 2015 09:11:42 +0000
 
