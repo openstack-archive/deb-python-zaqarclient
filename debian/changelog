@@ -1,3 +1,9 @@
+python-zaqarclient (0.3.0-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+
+ -- Corey Bryant <corey.bryant@canonical.com>  Tue, 01 Dec 2015 15:13:44 -0500
+
 python-zaqarclient (0.2.0-2) unstable; urgency=medium
 
   * Fixed empty package with no python module.
