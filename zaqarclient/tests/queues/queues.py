@@ -35,7 +35,7 @@ class QueuesV1QueueUnitTest(base.QueuesTestBase):
             send_method.return_value = resp
 
             metadata = self.queue.metadata(test_metadata)
-            self.assertEqual(metadata, test_metadata)
+            self.assertEqual(test_metadata, metadata)
 
     def test_queue_metadata_update(self):
         test_metadata = {'type': 'Bank Accounts'}
@@ -48,10 +48,10 @@ class QueuesV1QueueUnitTest(base.QueuesTestBase):
             send_method.return_value = resp
 
             metadata = self.queue.metadata(test_metadata)
-            self.assertEqual(metadata, test_metadata)
+            self.assertEqual(test_metadata, metadata)
 
             metadata = self.queue.metadata(new_meta)
-            self.assertEqual(metadata, new_meta)
+            self.assertEqual(new_meta, metadata)
 
     def test_queue_create(self):
         with mock.patch.object(self.transport, 'send',
@@ -227,7 +227,7 @@ class QueuesV1QueueUnitTest(base.QueuesTestBase):
 
             rst = self.queue.delete_messages('50b68a50d6f5b8c8a7c62b01',
                                              '50b68a50d6f5b8c8a7c62b02')
-            self.assertEqual(rst, None)
+            self.assertEqual(None, rst)
 
             # NOTE(flaper87): Nothing to assert here,
             # just checking our way down to the transport
@@ -267,7 +267,7 @@ class QueuesV1QueueFunctionalTest(base.QueuesTestBase):
         queue._get_transport = mock.Mock(return_value=self.transport)
         queue.post(messages)
         stats = queue.stats
-        self.assertEqual(stats["messages"]["free"], 3)
+        self.assertEqual(3, stats["messages"]["free"])
 
     def test_queue_metadata_functional(self):
         test_metadata = {'type': 'Bank Accounts'}
@@ -277,7 +277,7 @@ class QueuesV1QueueFunctionalTest(base.QueuesTestBase):
         # NOTE(flaper87): Clear metadata's cache
         queue._metadata = None
         metadata = queue.metadata()
-        self.assertEqual(metadata, test_metadata)
+        self.assertEqual(test_metadata, metadata)
 
     def test_queue_metadata_reload_functional(self):
         test_metadata = {'type': 'Bank Accounts'}
@@ -288,7 +288,7 @@ class QueuesV1QueueFunctionalTest(base.QueuesTestBase):
         # but don't clear it.
         queue._metadata = 'test'
         metadata = queue.metadata(force_reload=True)
-        self.assertEqual(metadata, test_metadata)
+        self.assertEqual(test_metadata, metadata)
 
     def test_message_post_functional(self):
         messages = [
@@ -301,7 +301,7 @@ class QueuesV1QueueFunctionalTest(base.QueuesTestBase):
         queue._get_transport = mock.Mock(return_value=self.transport)
         result = queue.post(messages)
         self.assertIn('resources', result)
-        self.assertEqual(len(result['resources']), 3)
+        self.assertEqual(3, len(result['resources']))
 
     def test_message_list_functional(self):
         queue = self.client.queue("test_queue")
@@ -345,7 +345,7 @@ class QueuesV1QueueFunctionalTest(base.QueuesTestBase):
         msg_id = res[0].split('/')[-1]
         msg = queue.message(msg_id)
         self.assertTrue(isinstance(msg, message.Message))
-        self.assertEqual(msg.href, res[0])
+        self.assertEqual(res[0], msg.href)
 
     def test_message_get_many_functional(self):
         queue = self.client.queue("test_queue")
@@ -362,9 +362,17 @@ class QueuesV1QueueFunctionalTest(base.QueuesTestBase):
         msgs_id = [ref.split('/')[-1] for ref in res]
         messages = queue.messages(*msgs_id)
         self.assertTrue(isinstance(messages, iterator._Iterator))
-        # FIXME(flaper87): Fix this as soon as we start
-        # sending `ids=1,2,3` to falcon
-        self.assertEqual(len(list(messages)), 1)
+        messages = list(messages)
+        length = len(messages)
+        if length == 3:
+            bodies = set(message.body for message in messages)
+            self.assertEqual(
+                set(['Post It 1!', 'Post It 2!', 'Post It 3!']), bodies)
+        elif length == 1:
+            # FIXME(therve): Old broken behavior, remove it as some point
+            pass
+        else:
+            self.fail("Wrong number of messages: '%d'" % length)
 
     def test_message_delete_many_functional(self):
         queue = self.client.queue("test_queue")
@@ -381,9 +389,7 @@ class QueuesV1QueueFunctionalTest(base.QueuesTestBase):
         queue.delete_messages(*msgs_id)
 
         messages = queue.messages()
-        # FIXME(flaper87): Fix this as soon as we start
-        # sending `ids=1,2,3` to falcon
-        self.assertEqual(len(list(messages)), 0)
+        self.assertEqual(0, len(list(messages)))
 
 
 class QueuesV1_1QueueUnitTest(QueuesV1QueueUnitTest):
@@ -435,7 +441,7 @@ class QueuesV1_1QueueFunctionalTest(QueuesV1QueueFunctionalTest):
 
         queue.post(messages)
         queue.delete()
-        self.assertEqual(len(list(queue.messages(echo=True))), 0)
+        self.assertEqual(0, len(list(queue.messages(echo=True))))
 
     def test_message_pop(self):
         queue = self.client.queue("test_queue")
@@ -451,7 +457,11 @@ class QueuesV1_1QueueFunctionalTest(QueuesV1QueueFunctionalTest):
         queue.post(messages)
         messages = queue.pop(count=2)
         self.assertTrue(isinstance(messages, iterator._Iterator))
-        self.assertEqual(len(list(messages)), 2)
+        self.assertEqual(2, len(list(messages)))
 
         remaining = queue.messages(echo=True)
-        self.assertEqual(len(list(remaining)), 1)
+        self.assertEqual(1, len(list(remaining)))
+
+
+class QueuesV2QueueFunctionalTest(QueuesV1_1QueueFunctionalTest):
+    pass

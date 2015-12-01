@@ -16,20 +16,18 @@
 import json
 import mock
 
+from tests.unit.queues.v1 import test_message as msg
 from zaqarclient.queues.v1 import iterator as iterate
 from zaqarclient.queues.v1 import message
-from zaqarclient.tests.queues import base
-from zaqarclient.tests.queues import messages as test_message
 from zaqarclient.transport import http
 from zaqarclient.transport import response
 
 
-class TestMessageIterator(base.QueuesTestBase):
-
+class TestMessageIterator(msg.TestMessageIterator):
     def test_no_next_iteration(self):
         messages = {'links': [],
                     'messages': [{
-                        'href': '/v1/queues/mine/messages/123123423',
+                        'href': '/v2/queues/mine/messages/123123423',
                         'ttl': 800,
                         'age': 790,
                         'body': {'event': 'ActivateAccount',
@@ -42,12 +40,12 @@ class TestMessageIterator(base.QueuesTestBase):
                                      'messages',
                                      message.create_object(self.queue))
         iterated = [msg for msg in iterator]
-        self.assertEqual(1, len(iterated))
+        self.assertEqual(len(iterated), 1)
 
     def test_stream(self):
         messages = {'links': [],
                     'messages': [{
-                        'href': '/v1/queues/mine/messages/123123423',
+                        'href': '/v2/queues/mine/messages/123123423',
                         'ttl': 800,
                         'age': 790,
                         'body': {'event': 'ActivateAccount',
@@ -65,7 +63,7 @@ class TestMessageIterator(base.QueuesTestBase):
             # and then call `_next_page` which will use the rel-next link
             # to get a new set of messages.
             link = {'rel': 'next',
-                    'href': "/v1/queues/mine/messages?marker=6244-244224-783"}
+                    'href': "/v2/queues/mine/messages?marker=6244-244224-783"}
             messages['links'].append(link)
 
             iterator = iterate._Iterator(self.queue.client,
@@ -73,12 +71,12 @@ class TestMessageIterator(base.QueuesTestBase):
                                          'messages',
                                          message.create_object(self.queue))
             iterated = [msg for msg in iterator.stream()]
-            self.assertEqual(2, len(iterated))
+            self.assertEqual(len(iterated), 2)
 
     def test_iterator_respect_paging(self):
         messages = {'links': [],
                     'messages': [{
-                        'href': '/v1/queues/mine/messages/123123423',
+                        'href': '/v2/queues/mine/messages/123123423',
                         'ttl': 800,
                         'age': 790,
                         'body': {'event': 'ActivateAccount',
@@ -93,7 +91,7 @@ class TestMessageIterator(base.QueuesTestBase):
             send_method.return_value = resp
 
             link = {'rel': 'next',
-                    'href': "/v1/queues/mine/messages?marker=6244-244224-783"}
+                    'href': "/v2/queues/mine/messages?marker=6244-244224-783"}
             messages['links'].append(link)
 
             iterator = iterate._Iterator(self.queue.client,
@@ -101,18 +99,11 @@ class TestMessageIterator(base.QueuesTestBase):
                                          'messages',
                                          message.create_object(self.queue))
             iterated = [msg for msg in iterator]
-            self.assertEqual(1, len(iterated))
+            self.assertEqual(len(iterated), 1)
 
 
-class QueuesV1MessageHttpUnitTest(test_message.QueuesV1MessageUnitTest):
-
-    transport_cls = http.HttpTransport
-    url = 'http://127.0.0.1:8888/v1'
-    version = 1
-
-
-class QueuesV1_1MessageHttpUnitTest(test_message.QueuesV1MessageUnitTest):
+class QueuesV2MessageHttpUnitTest(msg.QueuesV1MessageHttpUnitTest):
 
     transport_cls = http.HttpTransport
-    url = 'http://127.0.0.1:8888/v1.1'
-    version = 1.1
+    url = 'http://127.0.0.1:8888/v2'
+    version = 2
