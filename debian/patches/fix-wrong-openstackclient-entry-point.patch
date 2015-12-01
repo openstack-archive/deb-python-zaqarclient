@@ -7,16 +7,14 @@ Author: Thomas Goirand <zigo@debian.org>
 Forwarded: no
 Last-Update: 2015-10-2
 
---- python-zaqarclient-0.2.0.orig/setup.cfg
-+++ python-zaqarclient-0.2.0/setup.cfg
-@@ -52,8 +52,8 @@ openstack.messaging.v1 =
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -56,7 +56,7 @@
      queue_set_metadata = zaqarclient.queues.v1.cli:SetQueueMetadata
      queue_get_metadata = zaqarclient.queues.v1.cli:GetQueueMetadata
      queue_stats = zaqarclient.queues.v1.cli:GetQueueStats
 -    pool_create = zaqarclient.queues.v1.cli:CreatePool
--    flavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
 +    zaqarpool_create = zaqarclient.queues.v1.cli:CreatePool
-+    zaqarflavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
+     messaging_flavor_delete = zaqarclient.queues.v1.cli:DeleteFlavor
  
  openstack.cli.extension =
-     messaging = zaqarclient.queues.cli

@@ -3,6 +3,7 @@ python-zaqarclient (0.3.0-1) UNRELEASED; urgency=medium
   * New upstream release.
   * d/gbp.conf: Set debian-branch to debian/mitaka.
   * d/control: Update uploaders.
+  * d/p/fix-wrong-openstackclient-entry-point.patch: Rebased.
 
  -- Corey Bryant <corey.bryant@canonical.com>  Tue, 01 Dec 2015 15:13:44 -0500
 
