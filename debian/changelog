@@ -1,4 +1,4 @@
-python-zaqarclient (0.3.0-1) UNRELEASED; urgency=medium
+python-zaqarclient (0.3.0-1) experimental; urgency=medium
 
   * New upstream release.
   * d/gbp.conf: Set debian-branch to debian/mitaka.
