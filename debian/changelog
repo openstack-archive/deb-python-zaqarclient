@@ -6,6 +6,7 @@ python-zaqarclient (1.0.0-1) experimental; urgency=medium
   [ Thomas Goirand ]
   * New upstream release.
   * Fixed (build-)depends for this release.
+  * Standards-Version: 3.9.7 (no change).
 
  -- Thomas Goirand <zigo@debian.org>  Mon, 21 Mar 2016 14:11:50 +0100
 
