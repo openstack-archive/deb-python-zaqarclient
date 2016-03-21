@@ -23,7 +23,22 @@ from zaqarclient.queues.v1 import message
 
 class Queue(object):
 
-    def __init__(self, client, name, auto_create=True):
+    message_module = message
+
+    def __init__(self, client, name, auto_create=True, force_create=False):
+        """Initialize queue object
+
+        :param client: The client object of Zaqar.
+        :type client: `object`
+        :param name: Name of the queue.
+        :type name: `six.string_type`
+        :param auto_create: If create the queue automatically in database.
+        :type auto_create: `boolean`
+        :param force_create: If create the queue and skip the API version
+            check, which is useful for command line interface.
+        :type force_create: `boolean`
+        :returns: The queue object.
+        """
         self.client = client
 
         if name == "":
@@ -34,7 +49,7 @@ class Queue(object):
         self._metadata = None
 
         if auto_create:
-            self.ensure_exists()
+            self.ensure_exists(force_create=force_create)
 
     @property
     def name(self):
@@ -48,7 +63,7 @@ class Queue(object):
         else:
             return core.queue_exists(trans, req, self._name)
 
-    def ensure_exists(self):
+    def ensure_exists(self, force_create=False):
         """Ensures a queue exists
 
         This method is not race safe,
@@ -56,7 +71,7 @@ class Queue(object):
         right after it was called.
         """
         req, trans = self.client._request_and_transport()
-        if req.api.is_supported('queue_set_metadata'):
+        if force_create or self.client.api_version < 1.1:
             core.queue_create(trans, req, self._name)
 
     def metadata(self, new_meta=None, force_reload=False):
@@ -80,10 +95,13 @@ class Queue(object):
         # NOTE(jeffrey4l): Ensure that metadata is cleared when the new_meta
         # is a empty dict.
         if new_meta is not None:
-            if req.api.is_supported('queue_set_metadata'):
+            if self.client.api_version < 1.1:
                 core.queue_set_metadata(trans, req, self._name, new_meta)
-            else:
+            elif not len(new_meta):
+                # if metadata is empty dict, clear existing metadata
                 core.queue_create(trans, req, self._name, metadata=new_meta)
+            else:
+                core.queue_update(trans, req, self._name, metadata=new_meta)
             self._metadata = new_meta
 
         # TODO(flaper87): Cache with timeout
@@ -140,7 +158,7 @@ class Queue(object):
         req, trans = self.client._request_and_transport()
         msg = core.message_get(trans, req, self._name,
                                message_id)
-        return message.Message(self, **msg)
+        return self.message_module.Message(self, **msg)
 
     def messages(self, *messages, **params):
         """Gets a list of messages from the server
@@ -182,7 +200,7 @@ class Queue(object):
         return iterator._Iterator(self.client,
                                   msgs,
                                   'messages',
-                                  message.create_object(self))
+                                  self.message_module.create_object(self))
 
     def delete_messages(self, *messages):
         """Deletes a set of messages from the server
@@ -210,7 +228,7 @@ class Queue(object):
         return iterator._Iterator(self.client,
                                   msgs,
                                   'messages',
-                                  message.create_object(self))
+                                  self.message_module.create_object(self))
 
     def claim(self, id=None, ttl=None, grace=None,
               limit=None):

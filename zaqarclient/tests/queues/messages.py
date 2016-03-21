@@ -59,3 +59,12 @@ class QueuesV1MessageUnitTest(base.QueuesTestBase):
 
             send_method.return_value = None
             self.assertIsNone(msg.delete())
+
+
+class QueuesV2MessageUnitTest(QueuesV1MessageUnitTest):
+
+    def test_message_delete_with_claim(self):
+        pass
+
+    def test_message_delete(self):
+        pass

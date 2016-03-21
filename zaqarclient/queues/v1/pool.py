@@ -14,22 +14,20 @@
 # limitations under the License.
 
 from zaqarclient.queues.v1 import core
-from zaqarclient.transport import errors
 
 
 class Pool(object):
 
     def __init__(self, client, name,
                  weight=None, uri=None,
-                 group=None,
-                 auto_create=True, **options):
+                 group=None, auto_create=True,
+                 **kwargs):
         self.client = client
-
         self.uri = uri
         self.name = name
         self.weight = weight
         self.group = group
-        self.options = options
+        self.options = kwargs.get("options", {})
 
         if auto_create:
             self.ensure_exists()
@@ -42,24 +40,21 @@ class Pool(object):
         right after it was called.
         """
         req, trans = self.client._request_and_transport()
+        # As of now on PUT, zaqar server updates pool if it is already
+        # exists else it will create a new one. The zaqar client should
+        # maitain symmetry with zaqar server.
+        # TBD(mdnadeem): Have to change this code when zaqar server
+        # behaviour change for PUT operation.
 
-        try:
-            pool = core.pool_get(trans, req, self.name)
-            self.uri = pool["uri"]
-            self.weight = pool["weight"]
-            self.group = pool.get("group", None)
-            self.options = pool.get("options", {})
+        data = {'uri': self.uri,
+                'weight': self.weight,
+                'options': self.options}
 
-        except errors.ResourceNotFound:
-            data = {'uri': self.uri,
-                    'weight': self.weight,
-                    'options': self.options}
+        if self.client.api_version >= 1.1 and self.group:
+            data['group'] = self.group
 
-            if self.client.api_version >= 1.1:
-                data['group'] = self.group
-
-            req, trans = self.client._request_and_transport()
-            core.pool_create(trans, req, self.name, data)
+        req, trans = self.client._request_and_transport()
+        core.pool_create(trans, req, self.name, data)
 
     def update(self, pool_data):
         req, trans = self.client._request_and_transport()
@@ -72,6 +67,11 @@ class Pool(object):
         req, trans = self.client._request_and_transport()
         core.pool_delete(trans, req, self.name)
 
+    def get(self):
+        req, trans = self.client._request_and_transport()
+        return core.pool_get(trans, req, self.name, callback=None)
+
 
 def create_object(parent):
-    return lambda args: Pool(parent, args["name"], auto_create=False)
+    return lambda kwargs: Pool(parent, kwargs.pop('name'),
+                               auto_create=False, **kwargs)

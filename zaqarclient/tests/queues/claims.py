@@ -15,6 +15,7 @@
 
 import json
 import mock
+import time
 
 from zaqarclient.queues.v1 import claim
 from zaqarclient.tests.queues import base
@@ -152,6 +153,18 @@ class QueuesV1ClaimFunctionalTest(base.QueuesTestBase):
         cl.delete()
         self.assertRaises(errors.ResourceNotFound, queue.claim, id=claim_id)
 
+    def test_claim_age(self):
+        queue = self.client.queue("test_queue")
+        queue._get_transport = mock.Mock(return_value=self.transport)
+
+        messages = [{'ttl': 60, 'body': 'image.upload'}]
+        queue.post(messages)
+
+        res = queue.claim(ttl=100, grace=60)
+        self.assertGreaterEqual(res.age, 0)
+        time.sleep(2)
+        self.assertGreaterEqual(res.age, 2)
+
 
 class QueueV1_1ClaimUnitTest(QueueV1ClaimUnitTest):
 
@@ -181,3 +194,15 @@ class QueueV1_1ClaimUnitTest(QueueV1ClaimUnitTest):
                 num_tested += 1
                 self.assertEqual(result[num]['href'], msg.href)
             self.assertEqual(len(result), num_tested)
+
+
+class QueuesV1_1ClaimFunctionalTest(QueuesV1ClaimFunctionalTest):
+    pass
+
+
+class QueueV2ClaimUnitTest(QueueV1_1ClaimUnitTest):
+    pass
+
+
+class QueuesV2ClaimFunctionalTest(QueuesV1_1ClaimFunctionalTest):
+    pass

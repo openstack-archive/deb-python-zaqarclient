@@ -1,4 +1,4 @@
-# Copyright (c) 2013 Red Hat, Inc.
+# Copyright (c) 2014 Red Hat, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -13,12 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from zaqarclient.tests.queues.v1 import queues
+
+from zaqarclient.tests.queues import pool
+from zaqarclient.transport import http
 
 
-class QueuesV2QueueUnitTest(queues.QueuesV1_1QueueUnitTest):
-    pass
+class QueuesV2PoolHttpUnitTest(pool.QueuesV2PoolUnitTest):
 
-
-class QueuesV2QueueFunctionalTest(queues.QueuesV1_1QueueFunctionalTest):
-    pass
+    transport_cls = http.HttpTransport
+    url = 'http://127.0.0.1:8888/v2'
+    version = 2

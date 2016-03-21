@@ -47,6 +47,9 @@ class KeystoneAuth(base.AuthBackend):
                 * auth_url: endpoint to authenticate against
                 * insecure: allow insecure SSL (no cert verification)
                 * project_{name|id}: name or ID of project
+                * region_name: Name of a region
+                * cacert:CA certificate
+
         """
         return ksclient.Client(**kwargs)
 
@@ -62,23 +65,24 @@ class KeystoneAuth(base.AuthBackend):
             the auth information.
         """
 
-        token = self.conf.get('os_auth_token')
+        def get_options(k):
+            return self.conf.get(k, self.conf.get("os_%s" % k))
+
+        token = get_options('auth_token')
         if not token or not request.endpoint:
             # NOTE(flaper87): Lets assume all the
             # required information was provided
             # either through env variables or CLI
             # params. Let keystoneclient fail otherwise.
-            ks_kwargs = {
-                'username': self.conf.get('os_username'),
-                'password': self.conf.get('os_password'),
-                'tenant_id': self.conf.get('os_project_id'),
-                'tenant_name': self.conf.get('os_project_name'),
-                'auth_url': self.conf.get('os_auth_url'),
-                'insecure': self.conf.get('insecure'),
-            }
+
+            ks_kwargs = {}
+            keys = ("username", "password", "project_id",
+                    "project_name", "auth_url", "insecure",
+                    "cacert", "region_name")
+            for k in keys:
+                ks_kwargs.update({k: get_options(k)})
 
             _ksclient = self._get_ksclient(**ks_kwargs)
-
             if not token:
                 token = _ksclient.auth_token
 

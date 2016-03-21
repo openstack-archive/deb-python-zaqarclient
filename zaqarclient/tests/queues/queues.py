@@ -17,8 +17,10 @@ import json
 import mock
 
 from zaqarclient import errors
+from zaqarclient.queues import client
 from zaqarclient.queues.v1 import iterator
 from zaqarclient.queues.v1 import message
+from zaqarclient.queues.v2 import subscription
 from zaqarclient.tests.queues import base
 from zaqarclient.transport import response
 
@@ -227,7 +229,7 @@ class QueuesV1QueueUnitTest(base.QueuesTestBase):
 
             rst = self.queue.delete_messages('50b68a50d6f5b8c8a7c62b01',
                                              '50b68a50d6f5b8c8a7c62b02')
-            self.assertEqual(None, rst)
+            self.assertIsNone(rst)
 
             # NOTE(flaper87): Nothing to assert here,
             # just checking our way down to the transport
@@ -463,5 +465,73 @@ class QueuesV1_1QueueFunctionalTest(QueuesV1QueueFunctionalTest):
         self.assertEqual(1, len(list(remaining)))
 
 
+class QueuesV2QueueUnitTest(QueuesV1_1QueueUnitTest):
+
+    def test_message_get(self):
+        pass
+
+    def test_queue_subscriptions(self):
+        result = {
+            "subscriptions": [{
+                "source": 'test',
+                "id": "1",
+                "subscriber": 'http://trigger.me',
+                "ttl": 3600,
+                "options": {}},
+                {
+                "source": 'test',
+                "id": "2",
+                "subscriber": 'http://trigger.you',
+                "ttl": 7200,
+                "options": {}}]
+        }
+
+        with mock.patch.object(self.transport, 'send',
+                               autospec=True) as send_method:
+
+            resp = response.Response(None, json.dumps(result))
+            send_method.return_value = resp
+
+            subscriptions = self.queue.subscriptions()
+            subscriber_list = [s.subscriber for s in list(subscriptions)]
+            self.assertIn('http://trigger.me', subscriber_list)
+            self.assertIn('http://trigger.you', subscriber_list)
+
+
 class QueuesV2QueueFunctionalTest(QueuesV1_1QueueFunctionalTest):
-    pass
+
+    def test_signed_url(self):
+        queue = self.client.queue('test_queue')
+        messages = [{'ttl': 300, 'body': 'Post It!'}]
+        queue.post(messages)
+        self.addCleanup(queue.delete)
+        signature = queue.signed_url()
+        opts = {
+            'paths': signature['paths'],
+            'expires': signature['expires'],
+            'methods': signature['methods'],
+            'signature': signature['signature'],
+            'os_project_id': signature['project'],
+        }
+        auth_opts = {'backend': 'signed-url',
+                     'options': opts}
+        conf = {'auth_opts': auth_opts}
+        signed_client = client.Client(self.url, self.version, conf)
+        queue = signed_client.queue('test_queue')
+        [message] = list(queue.messages())
+        self.assertEqual('Post It!', message.body)
+
+    def test_queue_subscriptions(self):
+        queue_name = 'test_queue'
+        queue = self.client.queue(queue_name, force_create=True)
+        self.addCleanup(queue.delete)
+        queue._get_transport = mock.Mock(return_value=self.transport)
+
+        subscription.Subscription(self.client, queue_name,
+                                  subscriber='http://trigger.me')
+        subscription.Subscription(self.client, queue_name,
+                                  subscriber='http://trigger.you')
+
+        get_subscriptions = queue.subscriptions()
+        self.assertTrue(isinstance(get_subscriptions, iterator._Iterator))
+        self.assertEqual(2, len(list(get_subscriptions)))

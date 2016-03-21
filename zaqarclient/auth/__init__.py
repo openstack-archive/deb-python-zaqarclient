@@ -16,18 +16,20 @@
 
 from zaqarclient.auth import base
 from zaqarclient.auth import keystone
+from zaqarclient.auth import signed_url
 
 _BACKENDS = {
     'noauth': base.NoAuth,
-    'keystone': keystone.KeystoneAuth
+    'keystone': keystone.KeystoneAuth,
+    'signed-url': signed_url.SignedURLAuth,
 }
 
 
-def get_backend(backend='noauth', options=None):
+def get_backend(backend='keystone', options=None):
     """Loads backend `auth_backend`
 
     :params backend: The backend name to load.
-        Default: `noauth`
+        Default: `keystone`
     :type backend: `six.string_types`
     :param options: Options to pass to the Auth
         backend. Refer to the backend for more info.

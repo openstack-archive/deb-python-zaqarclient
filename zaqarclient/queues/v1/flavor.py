@@ -14,19 +14,18 @@
 # limitations under the License.
 
 from zaqarclient.queues.v1 import core
-from zaqarclient.transport import errors
 
 
 class Flavor(object):
 
     def __init__(self, client, name,
-                 pool=None, auto_create=True,
-                 **capabilities):
+                 pool_group=None, auto_create=True,
+                 **kwargs):
         self.client = client
 
         self.name = name
-        self.pool = pool
-        self.capabilities = capabilities
+        self.pool_group = pool_group
+        self.capabilities = kwargs.get('capabilities', {})
 
         if auto_create:
             self.ensure_exists()
@@ -39,18 +38,18 @@ class Flavor(object):
         right after it was called.
         """
         req, trans = self.client._request_and_transport()
+        # As of now on PUT, zaqar server updates flavor if it is already
+        # exists else it will create a new one. The zaqar client should
+        # maitain symmetry with zaqar server.
+        # TBD(mdnadeem): Have to change this code when zaqar server
+        # behaviour change for PUT operation.
 
-        try:
-            flavor = core.flavor_get(trans, req, self.name)
-            self.pool = flavor["pool"]
-            self.capabilities = flavor.get("capabilities", {})
+        data = {'pool_group': self.pool_group}
+        if self.client.api_version <= 1.1:
+            data['capabilities'] = self.capabilities
 
-        except errors.ResourceNotFound:
-            data = {'pool': self.pool,
-                    'capabilities': self.capabilities}
-
-            req, trans = self.client._request_and_transport()
-            core.flavor_create(trans, req, self.name, data)
+        req, trans = self.client._request_and_transport()
+        core.flavor_create(trans, req, self.name, data)
 
     def update(self, flavor_data):
         req, trans = self.client._request_and_transport()
@@ -63,6 +62,11 @@ class Flavor(object):
         req, trans = self.client._request_and_transport()
         core.flavor_delete(trans, req, self.name)
 
+    def get(self):
+        req, trans = self.client._request_and_transport()
+        return core.flavor_get(trans, req, self.name, callback=None)
+
 
 def create_object(parent):
-    return lambda args: Flavor(parent, args["name"], auto_create=False)
+    return lambda kwargs: Flavor(parent, kwargs.pop('name'),
+                                 auto_create=False, **kwargs)
