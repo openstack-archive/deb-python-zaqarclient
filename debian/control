@@ -11,6 +11,9 @@ Build-Depends: debhelper (>= 9),
                python-pbr (>= 1.8),
                python-setuptools,
                python-sphinx,
+               python3-all,
+               python3-pbr (>= 1.8),
+               python3-setuptools,
 Build-Depends-Indep: python-coverage,
                      python-ddt (>= 1.0.1),
                      python-fixtures (>= 1.3.1),
@@ -27,6 +30,20 @@ Build-Depends-Indep: python-coverage,
                      python-six (>= 1.9.0),
                      python-stevedore (>= 1.5.0),
                      python-testtools (>= 1.4.0),
+                     python3-ddt (>= 1.0.1),
+                     python3-fixtures (>= 1.3.1),
+                     python3-jsonschema,
+                     python3-keystoneclient (>= 1:1.6.0),
+                     python3-mock (>= 1.2),
+                     python3-nose,
+                     python3-openstackclient (>= 2.1.0),
+                     python3-os-client-config (>= 1.13.1),
+                     python3-oslo.i18n (>= 2.1.0),
+                     python3-requests (>= 2.8.1),
+                     python3-six (>= 1.9.0),
+                     python3-stevedore (>= 1.5.0),
+                     python3-subunit,
+                     python3-testtools (>= 1.4.0),
                      subunit,
                      testrepository,
 Standards-Version: 3.9.7
@@ -45,7 +62,7 @@ Depends: python-jsonschema,
          python-stevedore (>= 1.5.0),
          ${misc:Depends},
          ${python:Depends},
-Description: OpenStack Zaqar Queueing API, client and library - Python 2.x
+Description: OpenStack Zaqar Queueing API, client and library - Python 2.7
  Zaqar is a multi-tenant cloud messaging service for web developers. It
  combines the ideas pioneered by Amazon's SQS product with additional semantics
  to support event broadcasting.
@@ -64,4 +81,35 @@ Description: OpenStack Zaqar Queueing API, client and library - Python 2.x
  API library. Plus, it installs a plugin to python-openstackclient that allows
  you to perform simple queue operations.
  .
- This package contains the Python 2.x module.
+ This package contains the Python 2.7 module.
+
+Package: python3-zaqarclient
+Architecture: all
+Depends: python3-jsonschema,
+         python3-keystoneclient (>= 1:1.6.0),
+         python3-oslo.i18n (>= 2.1.0),
+         python3-requests (>= 2.8.1),
+         python3-six (>= 1.9.0),
+         python3-stevedore (>= 1.5.0),
+         ${misc:Depends},
+         ${python3:Depends},
+Description: OpenStack Zaqar Queueing API, client and library - Python 3.x
+ Zaqar is a multi-tenant cloud messaging service for web developers. It
+ combines the ideas pioneered by Amazon's SQS product with additional semantics
+ to support event broadcasting.
+ .
+ The service features a fully RESTful API, which developers can use to send
+ messages between various components of their SaaS and mobile applications, by
+ using a variety of communication patterns. Underlying this API is an efficient
+ messaging engine designed with scalability and security in mind.
+ .
+ Other OpenStack components can integrate with Zaqar to surface events to end
+ users and to communicate with guest agents that run in the "over-cloud" layer.
+ Cloud operators can leverage Zaqar to provide equivalents of SQS and SNS to
+ their customers.
+ .
+ By installing python-zaqarclient you get programmatic access to the Zaqar v1.0
+ API library. Plus, it installs a plugin to python-openstackclient that allows
+ you to perform simple queue operations.
+ .
+ This package contains the Python 3.x module.
