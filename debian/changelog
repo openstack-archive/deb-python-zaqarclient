@@ -8,6 +8,7 @@ python-zaqarclient (1.0.0-1) experimental; urgency=medium
   * Fixed (build-)depends for this release.
   * Standards-Version: 3.9.7 (no change).
   * Removed fix-wrong-openstackclient-entry-point.patch.
+  * Fixed debian/copyright ordering.
 
  -- Thomas Goirand <zigo@debian.org>  Mon, 21 Mar 2016 14:11:50 +0100
 
