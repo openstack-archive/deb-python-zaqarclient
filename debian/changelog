@@ -7,6 +7,7 @@ python-zaqarclient (1.1.0-1) experimental; urgency=medium
   [ Thomas Goirand ]
   * New upstream release.
   * Fixed (build-)depends for this release.
+  * Using pkgos-dh_auto_test from openstack-pkg-tools >= 52~.
 
  -- Thomas Goirand <zigo@debian.org>  Wed, 13 Jul 2016 10:58:45 +0200
 
