@@ -1,0 +1,9 @@
+Code-Review+1: Sharath Rao <sharath.rao@ericsson.com>
+Code-Review+2: Flavio Percoco <fpercoco@redhat.com>
+Workflow+1: Flavio Percoco <fpercoco@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 11 Mar 2016 20:33:46 +0000
+Reviewed-on: https://review.openstack.org/291443
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/stable/mitaka
