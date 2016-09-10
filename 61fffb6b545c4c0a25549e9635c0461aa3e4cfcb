@@ -1,0 +1,9 @@
+Code-Review+1: venkatamahesh <Venkata.Kotha@infinite.com>
+Code-Review+2: Flavio Percoco <fpercoco@redhat.com>
+Workflow+1: Flavio Percoco <fpercoco@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Wed, 23 Sep 2015 13:46:29 +0000
+Reviewed-on: https://review.openstack.org/226036
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/stable/liberty
