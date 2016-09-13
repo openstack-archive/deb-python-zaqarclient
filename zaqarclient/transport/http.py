@@ -13,30 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from distutils.version import LooseVersion
+from distutils import version
 import json
 
 from zaqarclient.common import http
 from zaqarclient.transport import base
-# NOTE(flaper87): Something is completely borked
-# with some imports. Using `from ... import errors`
-# will end up importing `zaqarclient.errors` instead
-# of transports
-import zaqarclient.transport.errors as errors
 from zaqarclient.transport import response
 
 
 class HttpTransport(base.Transport):
-
-    http_to_zaqar = {
-        400: errors.MalformedRequest,
-        401: errors.UnauthorizedError,
-        403: errors.ForbiddenError,
-        404: errors.ResourceNotFound,
-        409: errors.ConflictError,
-        500: errors.InternalServerError,
-        503: errors.ServiceUnavailableError
-    }
 
     def __init__(self, options):
         super(HttpTransport, self).__init__(options)
@@ -90,7 +75,8 @@ class HttpTransport(base.Transport):
         # request's headers directly.
         headers = request.headers.copy()
         if (request.operation == 'queue_update' and
-                LooseVersion(request.api.label) >= LooseVersion('v2')):
+                (version.LooseVersion(request.api.label) >=
+                    version.LooseVersion('v2'))):
             headers['content-type'] = \
                 'application/openstack-messaging-v2.0-json-patch'
         else:
