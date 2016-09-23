@@ -1,0 +1,10 @@
+Code-Review+2: wangxiyuan <wangxiyuan@huawei.com>
+Code-Review+2: Flavio Percoco <fpercoco@redhat.com>
+Code-Review+2: wanghao <sxmatch1986@gmail.com>
+Workflow+1: wanghao <sxmatch1986@gmail.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 23 Sep 2016 02:17:19 +0000
+Reviewed-on: https://review.openstack.org/348118
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/master
