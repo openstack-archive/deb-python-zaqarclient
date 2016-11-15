@@ -1,0 +1,10 @@
+Code-Review+2: wangxiyuan <wangxiyuan@huawei.com>
+Code-Review+2: Thomas Herve <therve@redhat.com>
+Workflow+1: Thomas Herve <therve@redhat.com>
+Code-Review+2: Victoria Martinez de la Cruz <victoria@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Tue, 15 Nov 2016 09:55:55 +0000
+Reviewed-on: https://review.openstack.org/375182
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/master
