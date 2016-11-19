@@ -1,0 +1,8 @@
+Code-Review+2: Fei Long Wang <flwang@catalyst.net.nz>
+Workflow+1: Fei Long Wang <flwang@catalyst.net.nz>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 18 Nov 2016 23:25:11 +0000
+Reviewed-on: https://review.openstack.org/376147
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/master
