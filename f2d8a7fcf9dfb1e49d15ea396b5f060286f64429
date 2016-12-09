@@ -1,0 +1,8 @@
+Code-Review+2: Flavio Percoco <fpercoco@redhat.com>
+Workflow+1: Flavio Percoco <fpercoco@redhat.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Thu, 08 Dec 2016 12:35:07 +0000
+Reviewed-on: https://review.openstack.org/402844
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/master
