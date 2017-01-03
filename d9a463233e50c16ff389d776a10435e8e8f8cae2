@@ -1,0 +1,8 @@
+Code-Review+2: wangxiyuan <wangxiyuan@huawei.com>
+Workflow+1: wangxiyuan <wangxiyuan@huawei.com>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Fri, 23 Dec 2016 03:02:46 +0000
+Reviewed-on: https://review.openstack.org/413530
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/master
