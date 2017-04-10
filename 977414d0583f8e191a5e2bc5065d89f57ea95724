@@ -1,0 +1,10 @@
+Code-Review+2: wanghao <sxmatch1986@gmail.com>
+Code-Review+1: XueFeng Liu <liu.xuefeng1@zte.com.cn>
+Code-Review+2: Feilong Wang <flwang@catalyst.net.nz>
+Workflow+1: Feilong Wang <flwang@catalyst.net.nz>
+Verified+2: Jenkins
+Submitted-by: Jenkins
+Submitted-at: Mon, 10 Apr 2017 03:00:04 +0000
+Reviewed-on: https://review.openstack.org/442906
+Project: openstack/deb-python-zaqarclient
+Branch: refs/heads/master
